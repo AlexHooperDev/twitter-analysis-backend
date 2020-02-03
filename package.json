@@ -1,0 +1,14 @@
+{
+  "name": "twitter-analysis",
+  "version": "1.0.0",
+  "description": "A server that fetches tweets from a given user and parses them through AWS comprehend",
+  "main": "server.js",
+  "author": "Alex Hooper",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.610.0",
+    "es6-promise": "^4.2.8",
+    "express": "^4.17.1",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
