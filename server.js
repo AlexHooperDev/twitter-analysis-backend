@@ -7,5 +7,11 @@ const awaitTweets = async () => {
   return tweets;
 }
 
+const parser = async (tweets) => {
+  const parsedValues = await parseTweets(tweets);
+  return parsedValues;
+}
+
 awaitTweets()
-  .then(tweets => parseTweets(tweets));
+  .then(tweets => parser(tweets))
+  .then (parsed => console.log(parsed));
