@@ -22,20 +22,29 @@ const apiCall = (array, language) => {
 async function parseTweets(tweetObjects) {
   let tweetStrings = tweetObjects.map(tweet => tweet.tweet);
   var size = 25;
-  let sentiments = [];
   // Split the array
   const newArray = new Array(Math.ceil(tweetStrings.length / size)).fill("")
     .map(function () { return this.splice(0, size) }, tweetStrings.slice());
 
   // Map through each array. await the result of the api fetch and assign it to the array
   const fetchedTweets = newArray.map((slicedArray, i) => {
-    return apiCall(slicedArray, language).then(res => {
-      tweetObjects.forEach((tweet, i) => {
-        tweet.sentiment = res;
-      })
-    }).then(tweets => tweetObjects);
+    return apiCall(slicedArray, language);
   });
-  return Promise.all(fetchedTweets).then(res => res);
+
+  return Promise.all(fetchedTweets).then(res => {
+    let tempArr = [];
+
+    res.forEach((object) => {
+      object.ResultList.forEach((sentiment) => {
+        tempArr = [...tempArr, sentiment];
+      });
+    });
+
+    tweetObjects.forEach((tweet, i) => {
+      tweet.sentiment = tempArr[i].Sentiment;
+    });
+    return tweetObjects;
+  });
 }
 
 module.exports = parseTweets;
