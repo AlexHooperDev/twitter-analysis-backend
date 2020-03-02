@@ -19,8 +19,8 @@ const apiCall = (array, language) => {
   });
 }
 
-async function parseTweets(tweetObjects) {
-  let tweetStrings = tweetObjects.map(tweet => tweet.tweet);
+async function parseTweets(tweetObject) {
+  let tweetStrings = tweetObject.tweets.map(tweet => tweet.tweet);
   var size = 25;
   // Split the array
   const newArray = new Array(Math.ceil(tweetStrings.length / size)).fill("")
@@ -40,10 +40,11 @@ async function parseTweets(tweetObjects) {
       });
     });
 
-    tweetObjects.forEach((tweet, i) => {
+    tweetObject.tweets.forEach((tweet, i) => {
       tweet.sentiment = tempArr[i].Sentiment;
+      tweet.sentimentScore = tempArr[i].SentimentScore;
     });
-    return tweetObjects;
+    return tweetObject;
   });
 }
 
