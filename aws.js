@@ -19,14 +19,29 @@ const apiCall = (array, language) => {
   });
 }
 
+function getKeyByValue(object, value) {
+  return Object.keys(object).find(key =>
+    object[key] === value);
+}
+
 
 const getKeyPhrases = (tweets) => {
   // reduce all tweets to single long string
   let tweetArr = [];
   tweets.tweets.map(tweet => {
     return tweetArr = [...tweetArr, tweet.tweet];
-  }).join('');
-  console.log(tweetArr);
+  });
+  let concatString = tweetArr.join('');
+
+  var wordCounts = {};
+  var words = concatString.split(/\b/);
+
+  for (var i = 0; i < words.length; i++) {
+    wordCounts["_" + words[i]] = (wordCounts["_" + words[i]] || 0) + 1;
+  }
+
+  console.log(wordCounts);
+
 }
 
 

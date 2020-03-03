@@ -10,7 +10,7 @@ async function handleUser(user) {
     .then(tweets => parseTweets(tweets))
     .then(tweets => getStats(tweets))
     .then(sentiments => sentiments)
-    .then (tweets => getKeyPhrases(tweets));
+    .then(tweets => getKeyPhrases(tweets));
   return tweets;
 };
 
