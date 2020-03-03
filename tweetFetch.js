@@ -18,7 +18,7 @@ const fetchTweets = async (user) => {
       resObj.user.handle = tweet.user.screen_name;
       resObj.user.name = tweet.user.name;
       resObj.user.bio = tweet.user.description;
-      resObj.user.avatar = tweet.user.profile_image_url_https;
+      resObj.user.avatar = tweet.user.profile_image_url_https.split('_normal').join('');
       resObj.user.followers = tweet.user.followers_count;
       resObj.user.following = tweet.user.friends_count;
 

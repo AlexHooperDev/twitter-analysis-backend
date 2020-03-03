@@ -10,7 +10,7 @@ const apiCall = (array, language) => {
     comprehend.batchDetectSentiment(
       { LanguageCode: language, TextList: array },
       function (err, data) {
-        if (err) reject('not working');
+        if (err) console.log(err);
         else {
           resolve(data);
         }
@@ -18,6 +18,18 @@ const apiCall = (array, language) => {
     );
   });
 }
+
+
+const getKeyPhrases = (tweets) => {
+  // reduce all tweets to single long string
+  let tweetArr = [];
+  tweets.tweets.map(tweet => {
+    return tweetArr = [...tweetArr, tweet.tweet];
+  }).join('');
+  console.log(tweetArr);
+}
+
+
 
 async function parseTweets(tweetObject) {
   let tweetStrings = tweetObject.tweets.map(tweet => tweet.tweet);
@@ -48,4 +60,4 @@ async function parseTweets(tweetObject) {
   });
 }
 
-module.exports = parseTweets;
+module.exports = { parseTweets: parseTweets, getKeyPhrases: getKeyPhrases };
