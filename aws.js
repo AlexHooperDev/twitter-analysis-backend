@@ -19,12 +19,6 @@ const apiCall = (array, language) => {
   });
 }
 
-function getKeyByValue(object, value) {
-  return Object.keys(object).find(key =>
-    object[key] === value);
-}
-
-
 const getKeyPhrases = (tweets) => {
   // reduce all tweets to single long string
   let tweetArr = [];
@@ -37,14 +31,23 @@ const getKeyPhrases = (tweets) => {
   var words = concatString.split(/\b/);
 
   for (var i = 0; i < words.length; i++) {
-    wordCounts["_" + words[i]] = (wordCounts["_" + words[i]] || 0) + 1;
+    wordCounts[words[i]] = (wordCounts[ words[i]] || 0) + 1;
   }
+  // filter out connectors, @, other symbols
 
-  console.log(wordCounts);
+  const excludedWords = ['the', 'you', 'for', 'https', 'http', '://', '...', 'and', 'was', 'that'];
 
+  const isExcludedWord = (word) => excludedWords.includes(word);
+  // filter words used more than 10 times
+  const top20Words = Object.keys(wordCounts).filter(key => (wordCounts[key] > 20 && key.length > 2 && !isExcludedWord(key))).map(key => {
+    return { word: key, count: wordCounts[key] };
+  }).sort((a, b) => {
+    return b.count - a.count;
+  });
+
+  tweets.stats.mostUsedWords = top20Words;
+  return tweets;
 }
-
-
 
 async function parseTweets(tweetObject) {
   let tweetStrings = tweetObject.tweets.map(tweet => tweet.tweet);
