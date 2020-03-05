@@ -25,7 +25,7 @@ const getKeyPhrases = (tweets) => {
   tweets.tweets.map(tweet => {
     return tweetArr = [...tweetArr, tweet.tweet];
   });
-  let concatString = tweetArr.join('');
+  let concatString = tweetArr.join('').toLowerCase();
 
   var wordCounts = {};
   var words = concatString.split(/\b/);
@@ -35,11 +35,11 @@ const getKeyPhrases = (tweets) => {
   }
   // filter out connectors, @, other symbols
 
-  const excludedWords = ['the', 'you', 'for', 'https', 'http', '://', '...', 'and', 'was', 'that'];
+  const excludedWords = ['the', 'you', 'for', 'https', 'http', '://', '...', 'and', 'was', 'that', 'this', 'very', 'are', 'with', 'but', 'have', 'not', 'they', 'before', 'all', 'just', 'from', 'only', 'more', 'can', 'about', 'would', 'use', '-', 'there', 'say', 'been', 'get', 'some', 'one', 'out', '... ', '- ', ' -', 'your', 'what', 'get', 'see', 'who', 'because', 'still', 'when', 'sure', 'how', 'why', 'anyone', 'had', 'than', 'will', 'don', ' .', '. ', 'amp', '. ', ': ', '– ', 'has', 'way', 'their', '. ', '.""', 'then'];
 
   const isExcludedWord = (word) => excludedWords.includes(word);
   // filter words used more than 10 times
-  const top20Words = Object.keys(wordCounts).filter(key => (wordCounts[key] > 20 && key.length > 2 && !isExcludedWord(key))).map(key => {
+  const top20Words = Object.keys(wordCounts).filter(key => (wordCounts[key] > 5 && key.length > 2 && !isExcludedWord(key))).map(key => {
     return { word: key, count: wordCounts[key] };
   }).sort((a, b) => {
     return b.count - a.count;
