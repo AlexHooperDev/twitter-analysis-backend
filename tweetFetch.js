@@ -11,10 +11,6 @@ const fetchTweets = async (user) => {
 
   // func that waits for all other arrays to be fetched then joins them together
   //
-
-
-
-
   joinedArray = [];
 
   async function fetchWithMaxID(maxID) {
@@ -24,8 +20,7 @@ const fetchTweets = async (user) => {
       }
     })
       .then(res => res.json())
-      .then(data => joinedArray = [...joinedArray, ...data])
-      .then(data => data);
+      .then(data => joinedArray = [...joinedArray, ...data]);
   }
 
 
@@ -34,22 +29,19 @@ const fetchTweets = async (user) => {
       'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAIPiCAEAAAAAydh%2BTZvtnQ1XM0de4SXDGi0M2nU%3DO8ZxGK0uxRGuaAT9aUbxDFpl0svsSN5myayfzWAso0UIXwDigp'
     }
   })
+    .then(res => {
+      if (res.status = 404) {
+        throw new Error('User does not exist');
+      }
+    })
     .then(res => res.json())
     .then(data => {
       joinedArray = [...data];
-      let trigger = false;
-      while (!trigger) {
-        // fetch data. if array length is <= 1 then set trigger to true
-        if (fetchWithMaxID(joinedArray[data.length - 1].id).length <= 1) {
-          console.log('no more tweets to fetch');
-          trigger = true;
-        } else {
-          console.log('more tweets to fetch');
-          return fetchWithMaxID(joinedArray[data.length - 1].id);
-        }
-      }
+      return fetchWithMaxID(joinedArray[data.length - 1].id);
+      // keep fetching until the returned data has a lenght of 1 or less
     })
     .then(() => {
+      console.log(joinedArray);
       joinedArray.map((tweet, i) => {
         resObj.tweets[i] = { tweet: tweet.full_text, sentiment: undefined, id: i };
       });
