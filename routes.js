@@ -14,7 +14,10 @@ function Routes() {
   app.post('/user', (req, res) => {
     // run entire tweet sequence
     handleUser(req.body.user)
-    .then(data => res.send(data));
+    .then(data => res.send(data))
+    // .catch(err => {
+    //   res.sendStatus(404)
+    // })
   });
 
 }

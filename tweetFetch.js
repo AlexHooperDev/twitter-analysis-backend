@@ -29,11 +29,6 @@ const fetchTweets = async (user) => {
       'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAIPiCAEAAAAAydh%2BTZvtnQ1XM0de4SXDGi0M2nU%3DO8ZxGK0uxRGuaAT9aUbxDFpl0svsSN5myayfzWAso0UIXwDigp'
     }
   })
-    .then(res => {
-      if (res.status = 404) {
-        throw new Error('User does not exist');
-      }
-    })
     .then(res => res.json())
     .then(data => {
       joinedArray = [...data];
