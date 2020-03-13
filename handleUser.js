@@ -7,11 +7,12 @@ const getStats = require('./tweetStats');
 async function handleUser(user) {
   console.log(user);
   const tweets = await awaitTweets(user)
+    .then(tweets => { if (tweets instanceof Error) throw new Error('404') })
     .then(tweets => parseTweets(tweets))
     .then(tweets => getStats(tweets))
     .then(sentiments => sentiments)
     .then(tweets => getKeyPhrases(tweets))
-    .catch(err => { throw new Error(err)});
+    .catch(err => err);
   return tweets;
 };
 

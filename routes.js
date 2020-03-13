@@ -14,10 +14,12 @@ function Routes() {
   app.post('/user', (req, res) => {
     // run entire tweet sequence
     handleUser(req.body.user)
+    .then(data => { if (data instanceof Error) {
+      console.log(data);
+      throw new Error(404);
+    } })
     .then(data => res.send(data))
-    // .catch(err => {
-    //   res.sendStatus(404)
-    // })
+    .catch((err) => res.status(err).send(404))
   });
 
 }

@@ -1,16 +1,17 @@
 require('isomorphic-fetch');
 let resObj = { user: {}, tweets: [], stats: {} };
 
+
+const fetchStatusHandler = (response) => {
+  console.log(response.status);
+  if (response.status === 200) {
+    return response;
+  } else {
+    throw new Error(response.status);
+  }
+};
+
 const fetchTweets = async (user) => {
-  //first fetch just count of 200, then set max ID to that of the last value fetched in previous fetch, then fetch again with count 200. Keep repeating this till all tweets gathered
-
-  // https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${user}&include_rts=false&excludereplies=true&count=200&tweet_mode=extended&count=200&max_id=${lastID}
-
-  // do initial fetch = get last id of array item.
-  // use last id and make another fetch
-
-  // func that waits for all other arrays to be fetched then joins them together
-  //
   joinedArray = [];
 
   async function fetchWithMaxID(maxID) {
@@ -19,6 +20,7 @@ const fetchTweets = async (user) => {
         'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAIPiCAEAAAAAydh%2BTZvtnQ1XM0de4SXDGi0M2nU%3DO8ZxGK0uxRGuaAT9aUbxDFpl0svsSN5myayfzWAso0UIXwDigp'
       }
     })
+      .then(fetchStatusHandler)
       .then(res => res.json())
       .then(data => joinedArray = [...joinedArray, ...data]);
   }
@@ -29,6 +31,7 @@ const fetchTweets = async (user) => {
       'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAIPiCAEAAAAAydh%2BTZvtnQ1XM0de4SXDGi0M2nU%3DO8ZxGK0uxRGuaAT9aUbxDFpl0svsSN5myayfzWAso0UIXwDigp'
     }
   })
+    .then(fetchStatusHandler)
     .then(res => res.json())
     .then(data => {
       joinedArray = [...data];
@@ -43,15 +46,16 @@ const fetchTweets = async (user) => {
     })
     .then(() => {
       const tweet = joinedArray[0];
+      let { user } = resObj
       // Tweet sentiments
 
       // User info
-      resObj.user.handle = tweet.user.screen_name;
-      resObj.user.name = tweet.user.name;
-      resObj.user.bio = tweet.user.description;
-      resObj.user.avatar = tweet.user.profile_image_url_https.split('_normal').join('');
-      resObj.user.followers = tweet.user.followers_count;
-      resObj.user.following = tweet.user.friends_count;
+      user.handle = tweet.user.screen_name;
+      user.name = tweet.user.name;
+      user.bio = tweet.user.description;
+      user.avatar = tweet.user.profile_image_url_https.split('_normal').join('');
+      user.followers = tweet.user.followers_count;
+      user.following = tweet.user.friends_count;
 
       // Most liked
       let currentHighestLike = { favorite_count: 0 };
@@ -80,7 +84,8 @@ const fetchTweets = async (user) => {
 
       resObj.stats.mostRetweetedTweet = currentHighestRetweeted;
     })
-    .then(() => resObj);
+    .then(() => resObj)
+    .catch((err) => err)
   return apiCall;
 }
 
