@@ -1,11 +1,10 @@
-const Routes = require('./routes');
-const handleUser = require('./handleUser');
-
+const Routes = require("./routes");
+const handleUser = require("./handleUser");
 
 const awaitTweets = async () => {
   const tweets = await fetchTweets();
   return tweets;
-}
+};
 
 Routes();
 
