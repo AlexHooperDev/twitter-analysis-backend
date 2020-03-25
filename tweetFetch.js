@@ -48,6 +48,7 @@ const fetchTweets = async user => {
       joinedArray.map((tweet, i) => {
         resObj.tweets[i] = {
           tweet: tweet.full_text,
+          date: tweet.created_at,
           sentiment: undefined,
           id: i
         };
