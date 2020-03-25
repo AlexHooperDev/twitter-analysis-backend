@@ -27,8 +27,6 @@ const getKeyPhrases = tweets => {
   });
   let concatString = tweetArr.join(" ").toLowerCase();
 
-  console.log(concatString);
-
   const userMentions = concatString.match(/(@\S+\b)/gi);
 
   const getOccurance = (arr, value) => arr.filter(v => v === value).length;
@@ -38,24 +36,38 @@ const getKeyPhrases = tweets => {
   );
 
   const userMentionAmounts = userMentionsFilter.map(value => {
-    let obj = {};
-    obj[value] = getOccurance(userMentions, value);
-    return obj;
+    return { user: value, count: getOccurance(userMentions, value) };
   });
 
-  tweets.stats.userMentions = userMentionAmounts;
+  const top20Mentions = userMentionAmounts
+    .filter(mention => mention.count > 5)
+    .map(key => {
+      return key;
+    })
+    .sort((a, b) => {
+      return b.count - a.count;
+    });
+
+  tweets.stats.userMentions = top20Mentions;
 
   const hashTags = concatString.match(/(#\S+\b)/gi);
 
   const hashtagFilter = Array.from(new Set(hashTags.map(value => value)));
 
   const hashtagAmounts = hashtagFilter.map(value => {
-    let obj = {};
-    obj[value] = getOccurance(hashTags, value);
-    return obj;
+    return { hashtag: value, count: getOccurance(hashTags, value) };
   });
 
-  tweets.stats.hashtags = hashtagAmounts;
+  const top20Hash = hashtagAmounts
+    .filter(hashtag => hashtag.count > 5)
+    .map(key => {
+      return key;
+    })
+    .sort((a, b) => {
+      return b.count - a.count;
+    });
+  console.log(top20Hash);
+  tweets.stats.hashtags = top20Hash;
 
   const removedMentions = concatString.replace(/(@\S+\b)/gi, "");
   const removedHashtags = removedMentions.replace(/(#\S+\b)/gi, "");
@@ -139,6 +151,7 @@ const getKeyPhrases = tweets => {
   ];
 
   const isExcludedWord = word => excludedWords.includes(word);
+
   // filter words used more than 10 times
   const top20Words = Object.keys(wordCounts)
     .filter(
