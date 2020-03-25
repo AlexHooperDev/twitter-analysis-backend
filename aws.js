@@ -66,7 +66,6 @@ const getKeyPhrases = tweets => {
     .sort((a, b) => {
       return b.count - a.count;
     });
-  console.log(top20Hash);
   tweets.stats.hashtags = top20Hash;
 
   const removedMentions = concatString.replace(/(@\S+\b)/gi, "");
@@ -147,7 +146,8 @@ const getKeyPhrases = tweets => {
     "their",
     ". ",
     '.""',
-    "then"
+    "then",
+    " "
   ];
 
   const isExcludedWord = word => excludedWords.includes(word);
@@ -155,7 +155,11 @@ const getKeyPhrases = tweets => {
   // filter words used more than 10 times
   const top20Words = Object.keys(wordCounts)
     .filter(
-      key => wordCounts[key] > 5 && key.length > 2 && !isExcludedWord(key)
+      key =>
+        wordCounts[key] > 5 &&
+        key.length > 2 &&
+        !isExcludedWord(key) &&
+        !/\s/.test(key)
     )
     .map(key => {
       return { word: key, count: wordCounts[key] };
@@ -163,7 +167,7 @@ const getKeyPhrases = tweets => {
     .sort((a, b) => {
       return b.count - a.count;
     });
-
+  console.log(top20Words);
   tweets.stats.mostUsedWords = top20Words;
   return tweets;
 };
