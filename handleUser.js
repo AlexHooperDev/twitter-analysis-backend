@@ -1,33 +1,31 @@
-const fetchTweets = require("./tweetFetch");
-const tweetParsing = require("./aws");
-const parseTweets = tweetParsing.parseTweets;
-const getKeyPhrases = tweetParsing.getKeyPhrases;
-const getStats = require("./tweetStats");
+const fetchTweets = require('./tweetFetch');
+const tweetParsing = require('./aws');
+
+const { parseTweets } = tweetParsing;
+const { getKeyPhrases } = tweetParsing;
+const getStats = require('./tweetStats');
+
+const awaitTweets = async (user) => {
+  const tweets = await fetchTweets(user);
+  return tweets;
+};
 
 async function handleUser(user) {
   console.log(user);
-  const tweets = await awaitTweets(user)
-    .then(tweets => {
+  let tweets = await awaitTweets(user)
+    .then((tweets) => {
       if (tweets instanceof Error) {
-        throw new Error("404");
+        throw new Error('404');
       } else {
         return tweets;
       }
     })
-    .then(tweets => {
-      return tweets;
-    })
-    .then(tweets => parseTweets(tweets))
-    .then(tweets => getStats(tweets))
-    .then(sentiments => sentiments)
-    .then(tweets => getKeyPhrases(tweets))
-    .catch(err => err);
+    .then((tweets) => parseTweets(tweets))
+    .then((tweets) => getStats(tweets))
+    // .then((sentiments) => sentiments)
+    .then((tweets) => getKeyPhrases(tweets))
+    .catch((err) => err);
   return tweets;
 }
-
-const awaitTweets = async user => {
-  const tweets = await fetchTweets(user);
-  return tweets;
-};
 
 module.exports = handleUser;
