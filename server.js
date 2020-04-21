@@ -1,5 +1,5 @@
-const Routes = require("./routes");
-const handleUser = require("./handleUser");
+const Routes = require('./routes');
+const handleUser = require('./handleUser');
 
 const awaitTweets = async () => {
   const tweets = await fetchTweets();
@@ -8,7 +8,7 @@ const awaitTweets = async () => {
 
 Routes();
 
-//wait for user to be pinged, then use that req.body as a
+// wait for user to be pinged, then use that req.body as a
 
 // awaitTweets()
 //   .then(tweets => parseTweets(tweets)).then(sentiments => console.log(sentiments));
