@@ -3,10 +3,7 @@ const getStats = (tweets) => {
   let currentHighestsentiment = { sentiment: { score: 0 } };
 
   tweets.tweets.forEach((tweet) => {
-    if (
-      tweet.sentiment.score
-      > currentHighestsentiment.sentiment.score
-    ) {
+    if (tweet.sentiment.score > currentHighestsentiment.sentiment.score) {
       currentHighestsentiment = tweet;
     }
   });
@@ -15,9 +12,7 @@ const getStats = (tweets) => {
   let currentLowestsentiment = { sentiment: { score: 0 } };
 
   tweets.tweets.forEach((tweet) => {
-    if (
-      tweet.sentiment.score < currentLowestsentiment.sentiment.score
-    ) {
+    if (tweet.sentiment.score < currentLowestsentiment.sentiment.score) {
       currentLowestsentiment = tweet;
     }
   });
@@ -25,7 +20,6 @@ const getStats = (tweets) => {
 
   // TODO Average positivity per tweet
   // pull all the positive sentiment values into an array, then get an average value from all the items in that array
-
   return tweets;
 };
 

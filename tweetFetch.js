@@ -1,6 +1,4 @@
-require("isomorphic-fetch");
-
-const resObj = { user: {}, tweets: [], stats: {} };
+require('isomorphic-fetch');
 
 const fetchStatusHandler = (response) => {
   console.log(response.status);
@@ -11,57 +9,20 @@ const fetchStatusHandler = (response) => {
 };
 
 const fetchTweets = async (user) => {
+  let resObj = { user: {}, tweets: [], stats: {} };
+  debugger;
   let joinedArray = [];
-
-  async function fetchWithMaxID(maxID) {
-    return fetch(
-      `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${user}&include_rts=false&excludereplies=true&count=200&tweet_mode=extended${
-        maxID ? "&max_id=" : ""
-      }${maxID || ""}`,
-      {
-        headers: {
-          Authorization:
-            "Bearer AAAAAAAAAAAAAAAAAAAAAIPiCAEAAAAAydh%2BTZvtnQ1XM0de4SXDGi0M2nU%3DO8ZxGK0uxRGuaAT9aUbxDFpl0svsSN5myayfzWAso0UIXwDigp",
-        },
-      }
-    )
-      .then(fetchStatusHandler)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length > 2) {
-          joinedArray = [...joinedArray, ...data];
-          fetchWithMaxID(data[data.length - 1].id);
-        } else {
-          joinedArray = [...joinedArray, ...data];
-          console.log(joinedArray.length);
-        }
-      });
-  }
-
-  // async function fetchWithMaxID(maxID) {
-  //   return fetch(
-  //     `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${user}&include_rts=false&excludereplies=true&count=200&tweet_mode=extended&max_id=${maxID}`,
-  //     {
-  //       headers: {
-  //         Authorization:
-  //           'Bearer AAAAAAAAAAAAAAAAAAAAAIPiCAEAAAAAydh%2BTZvtnQ1XM0de4SXDGi0M2nU%3DO8ZxGK0uxRGuaAT9aUbxDFpl0svsSN5myayfzWAso0UIXwDigp',
-  //       },
-  //     },
-  //   )
-  //     .then(fetchStatusHandler)
-  //     .then((res) => res.json())
-  //     .then((data) => { joinedArray = [...joinedArray, ...data]; });
-  // }
-
   const recursiveFetch = async (maxID) => {
     console.log(maxID);
     const maxIDParam = maxID ? `&max_id=${maxID}` : null;
     return fetch(
-      `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${user}&include_rts=false&excludereplies=true&count=200&tweet_mode=extended${maxIDParam || ''}`,
+      `https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=${user}&include_rts=false&excludereplies=true&count=200&tweet_mode=extended${
+        maxIDParam || ''
+      }`,
       {
         headers: {
           Authorization:
-            "Bearer AAAAAAAAAAAAAAAAAAAAAIPiCAEAAAAAydh%2BTZvtnQ1XM0de4SXDGi0M2nU%3DO8ZxGK0uxRGuaAT9aUbxDFpl0svsSN5myayfzWAso0UIXwDigp",
+            'Bearer AAAAAAAAAAAAAAAAAAAAAIPiCAEAAAAAydh%2BTZvtnQ1XM0de4SXDGi0M2nU%3DO8ZxGK0uxRGuaAT9aUbxDFpl0svsSN5myayfzWAso0UIXwDigp',
         },
       }
     )
@@ -85,7 +46,7 @@ const fetchTweets = async (user) => {
           date: tweet.created_at,
           followers: tweet.user.followers_count,
           sentiment: undefined,
-          id: i,
+          id: tweet.id_str,
         };
       });
     })
@@ -99,8 +60,8 @@ const fetchTweets = async (user) => {
       user.name = tweet.user.name;
       user.bio = tweet.user.description;
       user.avatar = tweet.user.profile_image_url_https
-        .split("_normal")
-        .join("");
+        .split('_normal')
+        .join('');
       user.followers = tweet.user.followers_count;
       user.following = tweet.user.friends_count;
 

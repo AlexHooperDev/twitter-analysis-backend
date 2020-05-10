@@ -1,0 +1,8 @@
+dispatch:
+  - url: '*/user*'
+    service: default
+  # Default service serves the typical web resources and all static resources.
+  - url: 'twitter-analysis.hooper.dev/*'
+    service:
+      ta-fe
+      # Default service serves the typical web resources and all static resources.

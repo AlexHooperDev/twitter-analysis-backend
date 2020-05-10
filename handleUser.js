@@ -6,7 +6,7 @@ const { getKeyPhrases } = tweetParsing;
 const getStats = require('./tweetStats');
 
 const awaitTweets = async (user) => {
-  const tweets = await fetchTweets(user);
+  let tweets = await fetchTweets(user);
   return tweets;
 };
 
